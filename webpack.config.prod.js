@@ -17,7 +17,7 @@ module.exports = {
             include: path.join(__dirname, 'src'),
             query: {
                 cacheDirectory: true,
-                presets: ["react", "es2015", "stage-0"],
+                presets: ["es2015", "stage-0"],
             }
         }, {
             test: /\.(jpe?g|png|gif|svg)$/i,

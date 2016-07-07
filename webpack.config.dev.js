@@ -19,8 +19,13 @@ module.exports = {
     module: {
         loaders: [{
             test: /\.js$/,
-            loaders: ['babel'],
-            include: path.join(__dirname, 'src')
+            loader: 'babel',
+            include: path.join(__dirname, 'src'),
+            query: {
+                cacheDirectory: true,
+                presets: ["es2015", "stage-0"],
+            }
+
         }, {
             test: /\.(jpe?g|png|gif|svg)$/i,
             loader: "file?hash=sha512&digest=hex&name=[hash].[ext]",

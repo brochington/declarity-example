@@ -1,1 +1,2 @@
-console.log("declarity example!!!!");
+import declarity from 'declarity';
+console.log("declarity!!!!");

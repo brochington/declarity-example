@@ -31,10 +31,6 @@ module.exports = {
             loader: "file?hash=sha512&digest=hex&name=[hash].[ext]",
             include: path.join(__dirname, 'src/img')
         }, {
-            test: /\.babylon$/,
-            loader: "file?hash=sha512&digest=hex&name=[hash].[ext]",
-            include: path.join(__dirname, 'src/meshes')
-        }, {
             test: /\.css$/,
             loader: "style-loader!css-loader"
         }

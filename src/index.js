@@ -52,8 +52,8 @@ class Button extends Entity {
         This should all be in create(), and create() should block.
     */
     onButtonClick = () => {
-        // console.log('get to onButtonClick', this);
-        // this.actions.incrementCount();
+        console.log('get to onButtonClick', this);
+        this.actions.incrementCount();
     }
 
     /**/
@@ -74,7 +74,6 @@ class Button extends Entity {
 
 class Box extends Entity {
     willMount = () => {
-        console.log("box will mount", this);
         this.stage = document.getElementById('stage');
         this.timer = document.createElement('div');
         this.timer.innerText = this.props.time;
@@ -82,7 +81,6 @@ class Box extends Entity {
         this.stage.appendChild(this.timer)
     }
     update = () => {
-        console.log("box update", this);
         this.timer.innerText = this.props.time;
     }
 }
@@ -98,23 +96,18 @@ class NullComponent extends Entity {
 // NOTE: must bind methods to the instance, like using arrow functions.
 class Stage extends Entity {
     willMount = () => {
-        // console.log('Stage did mount');
-        // console.log(this);
-        // this.actions.initCount();
+        this.actions.initCount();
     }
-/*
+
     static actions = {
         initCount: (state, actions) => {
-            // console.log('init count');
             return {count: 0};
         },
         incrementCount: (state, actions) => {
-            // console.log('incrementCount!!!');
-            // console.log('state', state(), {count: state().count + 1})
             return {count: state().count + 1}
         }
     }
-*/
+
     /* Hopefully either a regular, async, or generator function */
     create = () => {
         return {
@@ -125,10 +118,10 @@ class Stage extends Entity {
         render is called after create is all done.
     */
     render = () => {
-        // console.log('render');
-        // const {count} = this.state;
+
         return [
             <Box time={Date.now()} />,
+            <Box time={this.state.count} />,
             <Button />
             // <Box time={Date.now()}>
             //     <NullComponent />

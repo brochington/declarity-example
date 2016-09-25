@@ -1,52 +1,7 @@
 import declarity from 'declarity';
-import Engine from './Engine';
 
 const {Entity, register} = declarity;
-/*
-class Scene extends Entity {
-    static actions = {
-        getSomething: () => {
-            // console.log('getSomething!!!!');
-        }
-    }
 
-    willMount = () => {
-        // console.log('willMount Scene');
-    }
-
-    didMount = () => {
-        // console.log('didMount Scene');
-    }
-}
-
-class SomethingSmall extends Entity {
-    willMount = () => {
-        // console.log('SomethingSmall mount');
-    }
-}
-
-class Camera extends Entity {
-    render() {
-        return (
-            <SomethingSmall />
-        )
-    }
-}
-*/
-/*
-const stuff = (
-    <Engine something="here">
-        <Scene myScene="awesome">
-            <Camera />
-            {[1, 2, 3, 4].map(i => <Camera />)}
-        </Scene>
-    </Engine>
-);
-
-console.log("stuff", stuff);
-
-register(stuff);
-*/
 class Button extends Entity {
     /*
         This should all be in create(), and create() should block.
@@ -85,14 +40,6 @@ class Box extends Entity {
     }
 }
 
-class NullComponent extends Entity {
-    render = () => {
-        return (
-            <Box />
-        );
-    }
-}
-
 // NOTE: must bind methods to the instance, like using arrow functions.
 class Stage extends Entity {
     willMount = () => {
@@ -120,16 +67,12 @@ class Stage extends Entity {
     render = () => {
 
         return [
-            <Box time={Date.now()} />,
-            <Box time={this.state.count} />,
-            <Button />
-            // <Box time={Date.now()}>
-            //     <NullComponent />
-            // </Box>
+            <Box key="one" time={Date.now()} />,
+            (this.state.count % 2 ? <Box key="two" time={this.state.count} /> : null),
+            // <Box time={this.state.count} />,
+            <Button key="three"/>
         ];
     }
 }
-
-
 
 register(<Stage />);

@@ -7,13 +7,12 @@ class Button extends Entity {
         This should all be in create(), and create() should block.
     */
     onButtonClick = () => {
-        console.log('get to onButtonClick', this);
         this.actions.incrementCount();
     }
 
     /**/
     create = () => {
-        // console.log('button create');
+        console.log('button create');
         const stage = document.getElementById('stage');
         const button = document.createElement('button');
         button.innerText = "my button";
@@ -35,6 +34,10 @@ class Box extends Entity {
 
         this.stage.appendChild(this.timer)
     }
+
+    willUnmount = () => {
+        this.stage.removeChild(this.timer);
+    }
     update = () => {
         this.timer.innerText = this.props.time;
     }
@@ -44,6 +47,8 @@ class Box extends Entity {
 class Stage extends Entity {
     willMount = () => {
         this.actions.initCount();
+
+        requestAnimationFrame(this.tick)
     }
 
     static actions = {
@@ -53,6 +58,12 @@ class Stage extends Entity {
         incrementCount: (state, actions) => {
             return {count: state().count + 1}
         }
+    }
+
+    tick = () => {
+        // requestAnimationFrame(this.tick);
+        // console.log("this", this)
+        this.actions.incrementCount();
     }
 
     /* Hopefully either a regular, async, or generator function */
@@ -65,10 +76,9 @@ class Stage extends Entity {
         render is called after create is all done.
     */
     render = () => {
-
         return [
             <Box key="one" time={Date.now()} />,
-            (this.state.count % 2 ? <Box key="two" time={this.state.count} /> : null),
+            // (this.state.count % 3 ? <Box key="two" time={this.state.count} /> : null),
             // <Box time={this.state.count} />,
             <Button key="three"/>
         ];

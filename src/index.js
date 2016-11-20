@@ -1,86 +1,87 @@
 import declarity from 'declarity';
+import Staction from 'staction';
+
+const actions = {
+    incrementClick: (state, actions) => {
+        return {
+            ...state(),
+            count: state().count + 1
+        };
+    }
+}
 
 const {Entity, register} = declarity;
 
 class Button extends Entity {
-    /*
-        This should all be in create(), and create() should block.
-    */
-    onButtonClick = () => {
-        this.actions.incrementCount();
-    }
-
     /**/
-    create = () => {
-        console.log('button create');
-        const stage = document.getElementById('stage');
+    create = ({props}) => {
         const button = document.createElement('button');
-        button.innerText = "my button";
-        button.addEventListener('click', this.onButtonClick);
 
-        stage.appendChild(button);
+        button.innerText = "my button";
+        button.addEventListener('click', props.onButtonClick);
+
+        props.stage.appendChild(button);
+
         return {
-            button,
-            stage
+            button
         }
     }
 }
 
 class Box extends Entity {
-    willMount = () => {
-        this.stage = document.getElementById('stage');
-        this.timer = document.createElement('div');
-        this.timer.innerText = this.props.time;
+    create = ({props}) => {
+        const {stage} = props;
+        const timer = document.createElement('div');
+        timer.innerText = props.time;
+        stage.appendChild(timer)
 
-        this.stage.appendChild(this.timer)
+        return {
+            timer
+        }
     }
 
-    willUnmount = () => {
-        this.stage.removeChild(this.timer);
+    didCreate
+
+    willUnmount = ({props, state}) => {
+        props.stage.removeChild(state.timer);
     }
-    update = () => {
-        this.timer.innerText = this.props.time;
+
+    update = ({props, state}) => {
+        state.timer.innerText = props.time;
     }
 }
 
 // NOTE: must bind methods to the instance, like using arrow functions.
 class Stage extends Entity {
-    willMount = () => {
-        this.actions.initCount();
-
-        requestAnimationFrame(this.tick)
-    }
-
-    static actions = {
-        initCount: (state, actions) => {
-            return {count: 0};
-        },
-        incrementCount: (state, actions) => {
-            return {count: state().count + 1}
-        }
-    }
-
-    tick = () => {
-        // requestAnimationFrame(this.tick);
-        // console.log("this", this)
-        this.actions.incrementCount();
-    }
-
     /* Hopefully either a regular, async, or generator function */
-    create = () => {
+    create = ({setState}) => {
+        const stage = document.getElementById('stage');
+
+        this.staction = new Staction();
+
+        this.staction.init(
+            actions,
+            () => {return {count: 0}},
+            (newState) => {
+                setState(newState)
+            }
+        )
+
         return {
-            count: 0
+            stage,
         }
     }
     /*
         render is called after create is all done.
     */
-    render = () => {
+    render = ({state}) => {
+        const {actions} = this.staction;
+        const {count} = this.staction.state;
+
         return [
-            <Box key="one" time={Date.now()} />,
-            // (this.state.count % 3 ? <Box key="two" time={this.state.count} /> : null),
-            // <Box time={this.state.count} />,
-            <Button key="three"/>
+            <Box key="one" stage={stage} time={Date.now()} />,
+            <Box stage={stage} time={count} />,
+            <Button key="three" stage={stage} onButtonClick={actions.incrementClick}/>
         ];
     }
 }

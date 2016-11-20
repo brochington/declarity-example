@@ -31,7 +31,8 @@
     "babylonjs": "^2.3.0",
     "declarity": "^0.0.1",
     "express": "^4.13.4",
-    "immutable": "^3.8.1"
+    "immutable": "^3.8.1",
+    "staction": "^0.0.7"
   },
   "devDependencies": {
     "babel-core": "^6.8.0",
